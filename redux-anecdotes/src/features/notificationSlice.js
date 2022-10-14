@@ -9,9 +9,12 @@ export const notificationSlice = createSlice({
     notify: (state, action) => {
       state.message = action.payload;
     },
+    clear: (state, action) => {
+      state.message = '';
+    },
   },
 });
 
-export const { notify } = notificationSlice.actions;
+export const { notify, clear } = notificationSlice.actions;
 
 export default notificationSlice.reducer;

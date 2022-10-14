@@ -1,9 +1,12 @@
-import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { clear } from '../features/notificationSlice';
 
 const Notification = () => {
-  const { notification } = useSelector((state) => state);
-  const [show, setShow] = useState();
+  const {
+    notification: { message },
+  } = useSelector((state) => state);
+  const dispatch = useDispatch();
   const style = {
     border: 'solid',
     padding: 10,
@@ -12,18 +15,15 @@ const Notification = () => {
 
   useEffect(() => {
     let timeout;
-    if (notification) {
-      setShow(true);
-      timeout = setTimeout(() => {
-        setShow(false);
-      }, 3000);
+    if (message) {
+      timeout = setTimeout(() => dispatch(clear()), 5000);
     }
     return () => {
       clearTimeout(timeout);
     };
-  }, [notification]);
+  }, [message, dispatch]);
 
-  return show && <div style={style}>{notification.message}</div>;
+  return message && <div style={style}>{message}</div>;
 };
 
 export default Notification;
