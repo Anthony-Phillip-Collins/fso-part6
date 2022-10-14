@@ -1,23 +1,30 @@
-const initialState = {
+export const counterInitialState = Object.freeze({
   good: 0,
   ok: 0,
-  bad: 0
-}
+  bad: 0,
+});
 
-const counterReducer = (state = initialState, action) => {
-  console.log(action)
+const counterReducer = (state = counterInitialState, action) => {
+  console.log(state, action);
   switch (action.type) {
-    case 'GOOD':
-      return state
-    case 'OK':
-      return state
-    case 'BAD':
-      return state
-    case 'ZERO':
-      return state
-    default: return state
+    case CounterActionTypes.GOOD:
+      return { ...state, good: state.good + 1 };
+    case CounterActionTypes.OK:
+      return { ...state, ok: state.ok + 1 };
+    case CounterActionTypes.BAD:
+      return { ...state, bad: state.bad + 1 };
+    case CounterActionTypes.ZERO:
+      return counterInitialState;
+    default:
+      return state;
   }
-  
-}
+};
 
-export default counterReducer
+export const CounterActionTypes = Object.freeze({
+  GOOD: 'GOOD',
+  OK: 'OK',
+  BAD: 'BAD',
+  ZERO: 'ZERO',
+});
+
+export default counterReducer;
