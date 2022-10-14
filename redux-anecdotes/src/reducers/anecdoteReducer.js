@@ -17,7 +17,7 @@ const anecdoteObj = (content) => ({
 
 const initialState = anecdotesAtStart.map((str) => anecdoteObj(str));
 
-const reducer = (state = initialState, action) => {
+const anecdoteReducer = (state = initialState, action) => {
   console.log('state now: ', state);
   console.log('action', action);
 
@@ -57,4 +57,4 @@ const AnectodeActionTypes = Object.freeze({
   CREATE: 'CREATE',
 });
 
-export default reducer;
+export default anecdoteReducer;
