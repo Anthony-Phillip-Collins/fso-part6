@@ -5,7 +5,7 @@ export const counterInitialState = Object.freeze({
 });
 
 const counterReducer = (state = counterInitialState, action) => {
-  console.log(state, action);
+  console.log(action);
   switch (action.type) {
     case CounterActionTypes.GOOD:
       return { ...state, good: state.good + 1 };
