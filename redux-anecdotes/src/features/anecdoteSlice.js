@@ -26,7 +26,9 @@ export const anecdoteSlice = createSlice({
       state.find(({ id }) => id === action.payload).votes += 1;
     },
     create: (state, action) => {
-      state.push(anecdoteObj(action.payload));
+      if (action.payload) {
+        state.push(anecdoteObj(action.payload));
+      }
     },
   },
 });
