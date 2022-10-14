@@ -9,11 +9,13 @@ const anecdotesAtStart = [
   'Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.',
 ];
 
-const initialState = anecdotesAtStart.map((anecdote) => ({
-  content: anecdote,
+const anecdoteObj = (content) => ({
+  content,
   id: uuidv4(),
   votes: 0,
-}));
+});
+
+const initialState = anecdotesAtStart.map((str) => anecdoteObj(str));
 
 const reducer = (state = initialState, action) => {
   console.log('state now: ', state);
@@ -24,15 +26,32 @@ const reducer = (state = initialState, action) => {
       return state.map((anec) =>
         anec.id === action.data.id ? { ...anec, votes: anec.votes + 1 } : anec
       );
+
+    case AnectodeActionTypes.CREATE:
+      return action.data.anecdote
+        ? [...state, anecdoteObj(action.data.anecdote)]
+        : state;
+
     default:
       return state;
   }
 };
 
-export const vote = (id) => ({ type: AnectodeActionTypes.VOTE, data: { id } });
+const vote = (id) => ({ type: AnectodeActionTypes.VOTE, data: { id } });
+
+const create = (anecdote) => ({
+  type: AnectodeActionTypes.CREATE,
+  data: { anecdote },
+});
+
+export const anecdoteActions = {
+  vote,
+  create,
+};
 
 const AnectodeActionTypes = Object.freeze({
   VOTE: 'VOTE',
+  CREATE: 'CREATE',
 });
 
 export default reducer;
