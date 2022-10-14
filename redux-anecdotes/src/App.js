@@ -6,12 +6,12 @@ const App = () => {
   const anecdotes = useSelector((state) => state);
   const dispatch = useDispatch();
 
-  const onVoteClick = (id) => {
+  const voteAnecdote = (id) => {
     const { vote } = anecdoteActions;
     dispatch(vote(id));
   };
 
-  const onAnecdoteCreate = (anecdote) => {
+  const createAnecdote = (anecdote) => {
     const { create } = anecdoteActions;
     dispatch(create(anecdote));
   };
@@ -26,12 +26,12 @@ const App = () => {
             <div>{anecdote.content}</div>
             <div>
               has {anecdote.votes}
-              <button onClick={() => onVoteClick(anecdote.id)}>vote</button>
+              <button onClick={() => voteAnecdote(anecdote.id)}>vote</button>
             </div>
           </div>
         ))}
       <h2>create new</h2>
-      <AnecdoteForm create={onAnecdoteCreate} />
+      <AnecdoteForm create={createAnecdote} />
     </div>
   );
 };
