@@ -1,12 +1,16 @@
 import { useSelector, useDispatch } from 'react-redux';
 import AnecdoteForm from './components/AnecdoteForm';
 import AnecdotesList from './components/AnecdotesList';
+import Filter from './components/Filter';
 import Notification from './components/Notification';
 import { create } from './features/anecdoteSlice';
 import { notify } from './features/notificationSlice';
 
 const App = () => {
-  const { anecdotes } = useSelector((state) => state);
+  const anecdotes = useSelector(({ anecdotes, filter }) => {
+    return anecdotes.filter(({ content }) => content.includes(filter.text));
+  });
+
   const dispatch = useDispatch();
 
   const createAnecdote = (anecdote) => {
@@ -24,6 +28,7 @@ const App = () => {
         <h3>create new</h3>
         <AnecdoteForm create={createAnecdote} />
       </div>
+      <Filter />
       <AnecdotesList anecdotes={anecdotes} />
     </div>
   );
