@@ -1,3 +1,4 @@
+import { createSlice } from '@reduxjs/toolkit';
 import { v4 as uuidv4 } from 'uuid';
 
 const anecdotesAtStart = [
@@ -17,44 +18,19 @@ const anecdoteObj = (content) => ({
 
 const initialState = anecdotesAtStart.map((str) => anecdoteObj(str));
 
-const anecdoteReducer = (state = initialState, action) => {
-  console.log('state now: ', state);
-  console.log('action', action);
-
-  switch (action.type) {
-    case AnectodeActionTypes.VOTE:
-      return state.map((anec) =>
-        anec.id === action.data.id ? { ...anec, votes: anec.votes + 1 } : anec
-      );
-
-    case AnectodeActionTypes.CREATE:
-      return action.data.anecdote
-        ? [...state, anecdoteObj(action.data.anecdote)]
-        : state;
-
-    default:
-      return state;
-  }
-};
-
-const vote = (id) => ({
-  type: AnectodeActionTypes.VOTE,
-  data: { id },
+export const anecdoteSlice = createSlice({
+  name: 'anecdote',
+  initialState,
+  reducers: {
+    vote: (state, action) => {
+      state.find(({ id }) => id === action.payload).votes += 1;
+    },
+    create: (state, action) => {
+      state.push(anecdoteObj(action.payload));
+    },
+  },
 });
 
-const create = (anecdote) => ({
-  type: AnectodeActionTypes.CREATE,
-  data: { anecdote },
-});
+export const { vote, create } = anecdoteSlice.actions;
 
-export const anecdoteActions = {
-  vote,
-  create,
-};
-
-const AnectodeActionTypes = Object.freeze({
-  VOTE: 'VOTE',
-  CREATE: 'CREATE',
-});
-
-export default anecdoteReducer;
+export default anecdoteSlice.reducer;
