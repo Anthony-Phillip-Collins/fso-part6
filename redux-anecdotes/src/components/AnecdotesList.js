@@ -1,8 +1,16 @@
 import { useDispatch } from 'react-redux';
 import { vote } from '../features/anecdoteSlice';
+import { notify } from '../features/notificationSlice';
 
 const AnecdotesList = ({ anecdotes }) => {
   const dispatch = useDispatch();
+
+  const upvote = (id) => {
+    const item = anecdotes.find((item) => id === item.id);
+    dispatch(vote(id));
+    dispatch(notify(`Upvoted: "${item.content}".`));
+  };
+
   return [...anecdotes]
     .sort((a, b) => b.votes - a.votes)
     .map(({ content, votes, id }) => (
@@ -10,7 +18,7 @@ const AnecdotesList = ({ anecdotes }) => {
         <div>{content}</div>
         <div>
           has {votes}
-          <button onClick={() => dispatch(vote(id))}>vote</button>
+          <button onClick={() => upvote(id)}>vote</button>
         </div>
       </div>
     ));
