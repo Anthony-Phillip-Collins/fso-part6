@@ -37,7 +37,10 @@ const reducer = (state = initialState, action) => {
   }
 };
 
-const vote = (id) => ({ type: AnectodeActionTypes.VOTE, data: { id } });
+const vote = (id) => ({
+  type: AnectodeActionTypes.VOTE,
+  data: { id },
+});
 
 const create = (anecdote) => ({
   type: AnectodeActionTypes.CREATE,
