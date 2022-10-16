@@ -5,10 +5,19 @@ import Filter from './components/Filter';
 import Notification from './components/Notification';
 import { create } from './features/anecdoteSlice';
 import { notify } from './features/notificationSlice';
+import { SortTypes } from './features/sortSlice';
 
 const App = () => {
-  const anecdotes = useSelector(({ anecdotes, filter }) => {
-    return anecdotes.filter(({ content }) => content.includes(filter.text));
+  const anecdotes = useSelector(({ anecdotes, filter, sort }) => {
+    const list = anecdotes.filter(({ content }) =>
+      content.includes(filter.text)
+    );
+
+    if (sort === SortTypes.VOTES) {
+      list.sort((a, b) => b.votes - a.votes);
+    }
+
+    return list;
   });
 
   const dispatch = useDispatch();
