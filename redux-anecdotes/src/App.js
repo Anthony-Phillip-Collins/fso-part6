@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { getAll } from './app/services/anecdotes';
+import anecdoteService from './app/services/anecdote';
 import AnecdoteForm from './components/AnecdoteForm';
 import AnecdotesList from './components/AnecdotesList';
 import Filter from './components/Filter';
@@ -11,8 +11,8 @@ import { SortTypes } from './features/sortSlice';
 
 const App = () => {
   const anecdotes = useSelector(({ anecdotes, filter, sort }) => {
-    const list = anecdotes.filter(({ content }) =>
-      content.includes(filter.text)
+    const list = anecdotes.filter(
+      ({ content }) => content && content.includes(filter.text)
     );
 
     if (sort === SortTypes.VOTES) {
@@ -23,16 +23,18 @@ const App = () => {
 
   const dispatch = useDispatch();
 
-  const createAnecdote = (anecdote) => {
-    dispatch(create(anecdote));
+  const createAnecdote = async (content) => {
+    if (!content) return;
+    const anecdote = await anecdoteService.create({ content });
     if (anecdote) {
-      dispatch(notify(`Created: "${anecdote}"`));
+      dispatch(create(anecdote));
+      dispatch(notify(`Created: "${anecdote.content}"`));
     }
   };
 
   useEffect(() => {
     const load = async () => {
-      const all = await getAll();
+      const all = await anecdoteService.getAll();
       dispatch(setAll(all));
     };
     load();

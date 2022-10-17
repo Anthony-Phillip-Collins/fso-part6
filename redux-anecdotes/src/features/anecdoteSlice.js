@@ -1,15 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { v4 as uuidv4 } from 'uuid';
-
-const anecdotesAtStart = [];
-
-const anecdoteObj = (content) => ({
-  content,
-  id: uuidv4(),
-  votes: 0,
-});
-
-const initialState = anecdotesAtStart.map((str) => anecdoteObj(str));
+const initialState = [];
 
 export const anecdoteSlice = createSlice({
   name: 'anecdote',
@@ -20,7 +10,7 @@ export const anecdoteSlice = createSlice({
     },
     create: (state, action) => {
       if (action.payload) {
-        state.push(anecdoteObj(action.payload));
+        state.push(action.payload);
       }
     },
     setAll: (state, action) => {
