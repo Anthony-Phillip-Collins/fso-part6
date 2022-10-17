@@ -1,9 +1,11 @@
+import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { getAll } from './app/services/anecdotes';
 import AnecdoteForm from './components/AnecdoteForm';
 import AnecdotesList from './components/AnecdotesList';
 import Filter from './components/Filter';
 import Notification from './components/Notification';
-import { create } from './features/anecdoteSlice';
+import { create, setAll } from './features/anecdoteSlice';
 import { notify } from './features/notificationSlice';
 import { SortTypes } from './features/sortSlice';
 
@@ -16,7 +18,6 @@ const App = () => {
     if (sort === SortTypes.VOTES) {
       list.sort((a, b) => b.votes - a.votes);
     }
-
     return list;
   });
 
@@ -28,6 +29,14 @@ const App = () => {
       dispatch(notify(`Created: "${anecdote}"`));
     }
   };
+
+  useEffect(() => {
+    const load = async () => {
+      const all = await getAll();
+      dispatch(setAll(all));
+    };
+    load();
+  }, [dispatch]);
 
   return (
     <div>
