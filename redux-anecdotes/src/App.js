@@ -1,12 +1,11 @@
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import anecdoteService from './app/services/anecdote';
 import AnecdoteForm from './components/AnecdoteForm';
 import AnecdotesList from './components/AnecdotesList';
 import Filter from './components/Filter';
 import Notification from './components/Notification';
-import { create, setAll } from './features/anecdoteSlice';
-import { notify } from './features/notificationSlice';
+import { createAnecdote, fetchAllAnecdotes } from './features/anecdotesSlice';
+import { setNotification } from './features/notificationSlice';
 import { SortTypes } from './features/sortSlice';
 
 const App = () => {
@@ -23,19 +22,19 @@ const App = () => {
 
   const dispatch = useDispatch();
 
-  const createAnecdote = async (content) => {
+  const onCreate = async (content) => {
     if (!content) return;
-    const anecdote = await anecdoteService.create({ content });
+    const anecdote = await dispatch(createAnecdote({ content })).unwrap();
     if (anecdote) {
-      dispatch(create(anecdote));
-      dispatch(notify(`Created: "${anecdote.content}"`));
+      dispatch(
+        setNotification({ text: `Created: "${anecdote.content}"`, delay: 5000 })
+      );
     }
   };
 
   useEffect(() => {
     const load = async () => {
-      const all = await anecdoteService.getAll();
-      dispatch(setAll(all));
+      dispatch(fetchAllAnecdotes());
     };
     load();
   }, [dispatch]);
@@ -46,7 +45,7 @@ const App = () => {
       <Notification />
       <div style={{ paddingBottom: '2rem' }}>
         <h3>create new</h3>
-        <AnecdoteForm create={createAnecdote} />
+        <AnecdoteForm create={onCreate} />
       </div>
       <Filter />
       <AnecdotesList anecdotes={anecdotes} />

@@ -1,14 +1,15 @@
 import { useDispatch } from 'react-redux';
-import { vote } from '../features/anecdoteSlice';
-import { notify } from '../features/notificationSlice';
+import { voteAnecdote } from '../features/anecdotesSlice';
+import { setNotification } from '../features/notificationSlice';
 
 const AnecdotesList = ({ anecdotes }) => {
   const dispatch = useDispatch();
 
-  const upvote = (id) => {
-    const item = anecdotes.find((item) => id === item.id);
-    dispatch(vote(id));
-    dispatch(notify(`Upvoted: "${item.content}".`));
+  const upvote = async (id) => {
+    const anecdote = await dispatch(voteAnecdote(id)).unwrap();
+    dispatch(
+      setNotification({ text: `Upvoted: "${anecdote.content}".`, delay: 5000 })
+    );
   };
 
   return anecdotes.map(({ content, votes, id }) => (

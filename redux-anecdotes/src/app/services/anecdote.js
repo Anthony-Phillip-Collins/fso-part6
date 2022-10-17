@@ -13,9 +13,23 @@ const create = async ({ content }) => {
   return response.data;
 };
 
+const upvote = async (id) => {
+  if (!id) throw Error("No 'id' was set!");
+  const anecdote = (await getAll()).find((anec) => anec.id === id);
+
+  if (!anecdote) throw Error("No item found with that 'id'!");
+
+  const response = await axios.put(`${baseUri}/${id}`, {
+    ...anecdote,
+    votes: anecdote.votes + 1,
+  });
+  return response.data;
+};
+
 const anecdoteService = {
   getAll,
   create,
+  upvote,
 };
 
 export default anecdoteService;
