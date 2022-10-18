@@ -1,21 +1,22 @@
-import { useDispatch } from 'react-redux';
+import { connect } from 'react-redux';
 import { filter } from '../features/filterSlice';
 
-const Filter = () => {
-  const dispatch = useDispatch();
-  const handleChange = ({ target: { value } }) => {
-    dispatch(filter(value));
-  };
-
+const Filter = ({ onChange }) => {
   const style = {
     marginBottom: 10,
   };
 
   return (
     <div style={style}>
-      filter <input onChange={handleChange} />
+      filter <input onChange={(e) => onChange(e.target.value)} />
     </div>
   );
 };
 
-export default Filter;
+const mapStateToProps = null;
+
+const mapDispatchToProps = (dispatch) => ({
+  onChange: (value) => dispatch(filter(value)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Filter);

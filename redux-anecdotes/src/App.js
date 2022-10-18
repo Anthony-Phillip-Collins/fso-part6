@@ -4,8 +4,7 @@ import AnecdoteForm from './components/AnecdoteForm';
 import AnecdotesList from './components/AnecdotesList';
 import Filter from './components/Filter';
 import Notification from './components/Notification';
-import { createAnecdote, fetchAllAnecdotes } from './features/anecdotesSlice';
-import { setNotification } from './features/notificationSlice';
+import { fetchAllAnecdotes } from './features/anecdotesSlice';
 import { SortTypes } from './features/sortSlice';
 
 const App = () => {
@@ -22,16 +21,6 @@ const App = () => {
 
   const dispatch = useDispatch();
 
-  const onCreate = async (content) => {
-    if (!content) return;
-    const anecdote = await dispatch(createAnecdote({ content })).unwrap();
-    if (anecdote) {
-      dispatch(
-        setNotification({ text: `Created: "${anecdote.content}"`, delay: 5000 })
-      );
-    }
-  };
-
   useEffect(() => {
     const load = async () => {
       dispatch(fetchAllAnecdotes());
@@ -45,7 +34,7 @@ const App = () => {
       <Notification />
       <div style={{ paddingBottom: '2rem' }}>
         <h3>create new</h3>
-        <AnecdoteForm create={onCreate} />
+        <AnecdoteForm />
       </div>
       <Filter />
       <AnecdotesList anecdotes={anecdotes} />
